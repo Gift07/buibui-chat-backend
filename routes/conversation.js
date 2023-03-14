@@ -6,7 +6,7 @@ const {
 
 const router = require("express").Router();
 
-router.post("/", getConversation);
+router.post("/addnew", getConversation);
 router.get("/:userId", GetUserConv);
 router.get("/find/:firstUserId/:secondUserId", GetTwoUserConv);
 

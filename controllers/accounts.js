@@ -1,4 +1,5 @@
 const Account = require("../models/account");
+const Auth = require("../models/auth");
 
 const GetAccounts = async (req, res) => {
   try {
@@ -45,4 +46,20 @@ const GetOwnAccount = async (req, res) => {
   }
 };
 
-module.exports = { GetAccounts, GetAccount, GetOwnAccount };
+const GetAccountByPhone = async (req, res) => {
+  console.log("here");
+  try {
+    const { phone } = req.params;
+    const user = await Auth.findOne({ phone_number: phone });
+
+    const data = await Account.findOne({ user: user._id }).populate({
+      path: "user",
+      select: "-_id -password -updatedAt",
+    });
+    res.status(200).json(data);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+module.exports = { GetAccounts, GetAccount, GetOwnAccount, GetAccountByPhone };
